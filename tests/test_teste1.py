@@ -1,10 +1,9 @@
 from fastapi.testclient import TestClient
-import main as appmod
-client = TestClient(appmod.app)
+from main import app
 
-def test_teste1_status():
-    assert client.get("/teste1").status_code == 200
+client = TestClient(app)
 
-def test_teste1_payload():
-    body = client.get("/teste1").json()
-    assert "teste" in body and body["teste"]
+def test_teste1_ok():
+    r = client.get("/teste1")
+    assert r.status_code == 200
+    assert r.json().get("status") == "running"

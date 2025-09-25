@@ -1,9 +1,13 @@
 from fastapi.testclient import TestClient
-import main as appmod
-client = TestClient(appmod.app)
+from main import app
 
-def test_root_status():
-    assert client.get("/").status_code == 200
+client = TestClient(app)
 
-def test_root_payload():
-    assert client.get("/").json() == {"message": "Hello World"}
+def test_root_ok():
+    r = client.get("/")
+    assert r.status_code == 200
+    assert r.json().get("message") == "ok"
+
+def test_root_content_type():
+    r = client.get("/")
+    assert r.headers["content-type"].startswith("application/json")
