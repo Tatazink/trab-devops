@@ -1,6 +1,8 @@
 from fastapi.testclient import TestClient
 import main as appmod
+
 client = TestClient(appmod.app)
+
 
 def test_swagger_docs_loads():
     r = client.get("/docs")
