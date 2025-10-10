@@ -1,0 +1,26 @@
+name: CI (build, test, docker)
+
+on:
+  pull_request:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Pytest
+        run: |
+          if [ -f pytest.ini ] || ls tests/*.py 1> /dev/null 2>&1; then pytest -q; else echo 'Nenhum teste encontrado, pulando.'; fi
+      - name: Docker build
+        run: |
+          if [ -f Dockerfile ]; then docker build -t somativa1-app:ci .; else echo 'Sem Dockerfile – pulando.'; fi
