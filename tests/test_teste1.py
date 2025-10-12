@@ -12,3 +12,4 @@ def test_teste1_content_type():
     r = client.get("/teste1")
     assert r.headers["content-type"].startswith("application/json")
 
+    assert r.headers["content-type"].startswith("application/json")
